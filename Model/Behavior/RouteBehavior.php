@@ -160,7 +160,7 @@ class RouteBehavior extends ModelBehavior {
 
 						$this->Route->saveField('alias', $route_alias);
 						$this->Route->saveField('status', $route_status);
-						$this->Route->saveField('body', "array('controller' => 'nodes', 'action' => 'view', 'type' => '".$data['type']."', ".$node_id.")");
+						$this->Route->saveField('body', "array('plugin' => 'nodes', 'controller' => 'nodes', 'action' => 'view', 'type' => '".$data['type']."', 'slug' => '".$data['slug']."')");
 					}
 				}
 				else {
@@ -170,7 +170,7 @@ class RouteBehavior extends ModelBehavior {
 					$this->data['Route'] = array();
 					$this->data['Route']['alias'] = $route_alias;
 					$this->data['Route']['node_id'] = $node_id;
-					$this->data['Route']['body'] = "array('controller' => 'nodes', 'action' => 'view', 'type' => '".$data['type']."', ".$node_id.")";
+					$this->data['Route']['body'] = "array('plugin' => 'nodes', 'controller' => 'nodes', 'action' => 'view', 'type' => '".$data['type']."', 'slug' => '".$data['slug']."')";
 					$this->data['Route']['status'] = $route_status;
 					if ($this->Route->save($this->data)) {
 						//Saved	

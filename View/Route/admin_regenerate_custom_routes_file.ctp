@@ -5,6 +5,6 @@
     <?php echo $output_for_layout; ?>&nbsp;
     <?php echo $code_for_layout; ?>&nbsp;
     <div class="buttons">
-		<?php echo $this->Form->end(__('Okay', true)); ?>
+		  <?php echo $this->Form->end(__('Okay', true)); ?>
     </div>				
 </div>				

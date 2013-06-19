@@ -1,109 +1,89 @@
-<?php 
+<?php
+$this->extend('/Common/admin_index');
+$this->Html->script(array('Nodes.nodes'), false);
+
+$this->Html
+	->addCrumb('', '/admin', array('icon' => 'home'))
+	->addCrumb(__d('croogo', 'Routes'), $this->here);
+
 echo $this->Html->css('/route/css/route', 'stylesheet', array("media"=>"all" ), false);
+
 ?>
-<div class="route index">
-	<h2><?php echo $title_for_layout; ?></h2>
-
-	<div class="actions">
-		<ul>
-            <li><?php echo $this->Html->link(__d('route','New route', true), array('action'=>'add')); ?></li>
-            <li><?php echo $this->Html->link(__d('route','Enable all', true), array('action'=>'admin_enable_all'), array(), __('Enable all routes?', true)); ?></li>            
-            <li><?php echo $this->Html->link(__d('route','Disable all', true), array('action'=>'admin_disable_all'), array(), __('Disable all routes?', true)); ?></li>            
-            <li><?php echo $this->Html->link(__d('route','Delete all routes', true), array('action'=>'admin_delete_all'), array(), __('Delete all routes?\nTHIS CANNOT BE UNDONE!', true)); ?></li>            
-            <li><?php echo $this->Html->link(__d('route','Manually Regenerate Custom Routes File', true), array('action'=>'regenerate_custom_routes_file')); ?></li>            
-        </ul>
-    </div>
-
-    <table cellpadding="0" cellspacing="0">
-	    <?php
-			$tableHeaders =  $this->Html->tableHeaders(
-				array(
-					$this->Paginator->sort('id'),
-					__d('route','Alias', true),
-					__d('route','Body', true),											
-					$this->Paginator->sort('status'),                                            
-					  __('Actions', true),
-				)
-			);
-			echo $tableHeaders;
-	
-			$rows = array();
-			foreach ($routes as $route) {
-			
-				$actions = ' ' . $this->Html->link(
-					__('Delete', true), 
-					array(
-						'controller' => 'route',
-						'action' => 'delete',
-						$route['Route']['id'],
-						'token' => $this->params['_Token']['key'],
-					), 
-					null, 
-					__('Are you sure you want to delete this route?', true)
-				);
-				
-				$actions .= ' ' . $this->Html->link(
-					__('Edit Route', true), 
-					array(
-						'controller' => 'route', 
-						'action' => 'edit', 
-						$route['Route']['id']
-					)
-				);
-	
-				if ($route['Route']['node_id'] != 0) {
-					$actions .= ' ' . $this->Html->link(
-						__('Edit Node', true), 
-						array(
-							'plugin' => '', 
-							'controller' => 'nodes', 
-							'action' => 'edit', 
-							$route['Route']['node_id']
-						)
-					);
-				}
-	
-	
-				$newrow = array(
-					$route['Route']['id'],
-				);
-				
-				if ($route['Route']['status'] == 1) {
-					$newrow[] = $this->Html->link(
-							DS . $route['Route']['alias'], 
-							DS . $route['Route']['alias']
-					);
-				}
-				else {
-					$newrow[] = 
-						'<span class="route_disabled_link">'.
-						DS . $route['Route']['alias'].
-						'</span>';
-				}
-					
-				$newrow[] = substr(trim(strip_tags($route['Route']['body'])), 0, 150);
-				$newrow[] = $this->Layout->status($route['Route']['status']);
-				$newrow[] = $actions;
-				
-				$rows[] = $newrow;
-			}
-	
-			echo $this->Html->tableCells($rows);
-			echo $tableHeaders;
+<?php $this->start('actions'); ?>
+<?php
+	echo $this->Croogo->adminAction(
+		__d('croogo', 'Create route'),
+		array('action' => 'add'),
+		array('button' => 'success')
+	);
+	echo $this->Croogo->adminAction(
+		__d('croogo', 'Enable all'),
+		array('action' => 'enable_all'),
+		array('button' => 'success')
+	);
+	echo $this->Croogo->adminAction(
+		__d('croogo', 'Disable all'),
+		array('action' => 'disable_all'),
+		array('button' => 'success')
+	);
+	echo $this->Croogo->adminAction(
+		__d('croogo', 'Delete all routes'),
+		array('action' => 'delete_all'),
+		array('button' => 'success')
+	);
+	echo $this->Croogo->adminAction(
+		__d('croogo', 'Regenerate'),
+		array('action' => 'regenerate_custom_routes_file'),
+		array('button' => 'success')
+	);
+?>
+<?php $this->end(); ?>
+<div class="row-fluid">
+	<div class="span12">
+		<table class="table table-striped">
+		<?php
+			$tableHeaders =  $this->Html->tableHeaders(array(
+				$this->Paginator->sort('id'),
+				$this->Paginator->sort('alias'),
+				$this->Paginator->sort('body'),
+				$this->Paginator->sort('status'),
+				''
+			));
 		?>
+			<thead>
+				<?php echo $tableHeaders; ?>
+			</thead>
+			
+			<tbody>
+			<?php foreach ($routes as $route): ?>
+				<tr>
+					<td><?php echo $route['Route']['id']; ?></td>
+					<td><?php echo $route['Route']['alias']; ?></td>
+					<td><?php echo substr(trim(strip_tags($route['Route']['body'])), 0, 150); ?></td>
+					<td><?php
+						echo $this->element('admin/toggle', array(
+							'id' => $route['Route']['id'],
+							'status' => $route['Route']['status'],
+						));
+					?></td>
+					<td>
+						<div class="item-actions">
+						<?php
+							echo $this->Croogo->adminRowActions($route['Route']['id']);
+							echo ' ' . $this->Croogo->adminRowAction('',
+								array('action' => 'edit', $route['Route']['id']),
+								array('icon' => 'pencil', 'tooltip' => __d('croogo', 'Edit this item'))
+							);
+							echo ' ' . $this->Croogo->adminRowAction('',
+								'#Node' . $route['Route']['id'] . 'Id',
+								array('icon' => 'trash', 'tooltip' => __d('croogo', 'Remove this item'), 'rowAction' => 'delete'),
+								__d('croogo', 'Are you sure?')
+							);
+						?>
+						</div>
+					</td>
+				</tr>
+			<?php endforeach ?>
+		  </tbody>
     </table>
-</div>
-
-<div class="paging"><?php 
-	echo $this->Paginator->numbers(); 
-?></div>
-
-<div class="counter">
-	<?php 
-		echo $this->Paginator->counter(
-			array(
-				'format' => __('Page {:page} of {:pages}, showing {:current} records out of {:count} total, starting on record {:start}, ending on {:end}', true)
-			)
-		); 
-	?>
 </div>

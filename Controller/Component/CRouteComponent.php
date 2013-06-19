@@ -104,6 +104,7 @@ class CRouteComponent extends Component {
 			$testing = eval('return '.$route['Route']['body'].';');
 			if (is_array($testing)) {
 				$code .= 'CroogoRouter::connect(\'/'.$route['Route']['alias'].'\', '.$route['Route']['body'].');' . $newline;
+				$code .= 'Router::promote();' . $newline;
 			}
 		}
 		$code .= '?>';

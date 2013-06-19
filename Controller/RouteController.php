@@ -1,4 +1,8 @@
 <?php
+
+App::uses('RouteAppController', 'Route.Controller');
+App::uses('Croogo', 'Lib');
+
 /**
  * Route Controller
  *
@@ -20,18 +24,11 @@ class RouteController extends RouteAppController {
 	 * @access public
 	 */
 	public $paginate = array(
-        'limit' => 25,
+    'limit' => 25,
 		'order' => array (
 			'Route.alias' => 'asc',
 		),
 	);
-	
-	/**
-	 * Plugin name
-	 *
-	 * @var string
-	 */
-	var $pluginName = 'Route';
 	
 	/**
 	 * Controller name
@@ -47,7 +44,7 @@ class RouteController extends RouteAppController {
 	 * @var array
 	 * @access public
 	 */	
-	public $components = array('Security', 'Session', 'Route.CRoute');
+	public $components = array('Route.CRoute');
 
 	/**
 	 * Models used by the Controller
@@ -56,6 +53,18 @@ class RouteController extends RouteAppController {
 	 * @access public
 	 */
     public $uses = array('Route.Route');
+    
+  /**
+   * beforeFilter
+   *
+   * @return void
+   * @access public
+   */
+  	public function beforeFilter() {
+  		parent::beforeFilter();
+  
+  		$this->Security->unlockedActions[] = 'admin_toggle';
+  	}
 
 	/**
 	 * Route List/Index
@@ -82,6 +91,7 @@ class RouteController extends RouteAppController {
 				$this->Session->setFlash(__('Error saving route', true), 'default', array('class' => 'error'));
 			}
 		}
+		$this->render('admin_form');
 	}
 
 	/**
@@ -125,6 +135,18 @@ class RouteController extends RouteAppController {
 			}
 			$this->set('linkednode', $linkednode);
 		}
+		$this->render('admin_form');
+	}
+	
+/**
+ * Toggle Node status
+ *
+ * @param $id string Node id
+ * @param $status integer Current Node status
+ * @return void
+ */
+	public function admin_toggle($id = null, $status = null) {
+		$this->Croogo->fieldToggle($this->Route, $id, $status);
 	}
 		
 	/**
@@ -160,7 +182,7 @@ class RouteController extends RouteAppController {
 		if ($result['code'] != '') {
 			$result['code'] = '<textarea wrap="off" style="margin-top: 10px; font-size: 11px;" readonly="readonly">'.$result['code'].'</textarea>';
 		}
-		$this->set('code_for_layout', $result['code']);			 
+		$this->redirect(array('action'=>'index'));		 
 	}
 	
 	/**
