@@ -2,7 +2,7 @@ Description
 
 This Route plugin for Croogo lets you create pretty URLs for nodes or other routes from the Admin Interface.
 
-Version: 1.4 (for Croogo 1.4/CakePHP 2.x)
+Version: 1.5 (for Croogo 1.5 & 1.6 / CakePHP 2.x)
 
 IMPORTANT NOTE: 
 This README.txt file should be located at app/Plugin/Route/README.txt if you have installed the Route plugin correctly into your Croogo 1.4/CakePHP 2.x app folder.

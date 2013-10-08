@@ -1,16 +1,18 @@
 <?php
 /**
- * Route Helper
+ * Routes Controller
  *
- * An hook helper for demonstrating hook system.
+ * PHP version 5
  *
- * @category Route.Helper
+ * @category Routes.Controller
  * @package  Route
  * @version  1.5
  * @author   Damian Grant <codebogan@gmail.com>
  * @license  http://www.opensource.org/licenses/mit-license.php The MIT License
  * @link     http://www.croogo.org
  */
-class RouteHelper extends AppHelper {
+App::uses('AppController', 'Controller');
+
+class RoutesAppController extends AppController {
 
 }
