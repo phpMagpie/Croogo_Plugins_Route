@@ -13,55 +13,55 @@
  */
 class RouteActivation {
 
-/**
- * onActivate will be called if this returns true
- *
- * @param  object $controller Controller
- * @return boolean
- */
-  public function beforeActivation(Controller $controller) {
-    return true;
-  }
+	/**
+	 * onActivate will be called if this returns true
+	 *
+	 * @param  object $controller Controller
+	 * @return boolean
+	 */
+	public function beforeActivation(Controller $controller) {
+		return true;
+	}
 
-/**
- * Called after activating the plugin in ExtensionsPluginsController::admin_toggle()
- *
- * @param object $controller Controller
- * @return void
- */
-  public function onActivation(Controller $controller) {
-    $controller->Croogo->addAco('Route'); 
-	  $this->_schema('create');
-  }
+	/**
+	 * Called after activating the plugin in ExtensionsPluginsController::admin_toggle()
+	 *
+	 * @param object $controller Controller
+	 * @return void
+	 */
+	public function onActivation(Controller $controller) {
+		$controller->Croogo->addAco('Route'); 
+		$this->_schema('create');
+	}
 
-/**
- * onDeactivate will be called if this returns true
- *
- * @param  object $controller Controller
- * @return boolean
- */
-  public function beforeDeactivation(&$controller) {
-    return true;
-  }
+	/**
+	 * onDeactivate will be called if this returns true
+	 *
+	 * @param  object $controller Controller
+	 * @return boolean
+	 */
+	public function beforeDeactivation(&$controller) {
+		return true;
+	}
 
-/**
- * Called after deactivating the plugin in ExtensionsPluginsController::admin_toggle()
- *
- * @param object $controller Controller
- * @return void
- */
-  public function onDeactivation(&$controller) {
-    $controller->Croogo->removeAco('Route'); 
+	/**
+	 * Called after deactivating the plugin in ExtensionsPluginsController::admin_toggle()
+	 *
+	 * @param object $controller Controller
+	 * @return void
+	 */
+	public function onDeactivation(&$controller) {
+		$controller->Croogo->removeAco('Route'); 
 		$this->_schema('drop');
-  }
+	}
     		
-/**
- * Schema
- *
- * @param string sql action
- * @return void
- * @access protected
- */
+	/**
+	 * Schema
+	 *
+	 * @param string sql action
+	 * @return void
+	 * @access protected
+	 */
 	protected function _schema($action = 'create') {
 		App::uses('File', 'Utility');
 		App::import('Model', 'CakeSchema', false);
@@ -83,5 +83,4 @@ class RouteActivation {
 			}
 		}
 	}
-  	
 }
